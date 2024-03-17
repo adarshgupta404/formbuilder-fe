@@ -1,5 +1,4 @@
 import { GetFormStats, GetForms } from "@/actions/forms";
-import Landing from "@/components/Landing/landing";
 import {
   Card,
   CardContent,
@@ -22,7 +21,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { FormBuilder } from "@/types/@types";
 import { formatDistance } from "date-fns";
-export default function Home() {
+const page = ()=> {
   return (
     <>
       <div className="container pt-4">
@@ -196,3 +195,4 @@ function FormCard({ form }: { form: FormBuilder }) {
     </Card>
   );
 }
+export default page;
