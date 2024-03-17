@@ -34,20 +34,20 @@ export async function GetFormStats() {
       console.error("Error fetching form stats:", response.status);
       // Handle error cases as needed
       return {
-        visits: "0",
-        submissions: "0",
-        submissionRate: "0",
-        bounceRate: "0",
+        visits :0,
+        submissions:0,
+        submissionRate:0,
+        bounceRate:0,
       };
     }
   } catch (error) {
     console.error("An error occurred:", error);
     // Handle exceptions (e.g., network errors) here
     return {
-      visits: "0",
-      submissions: "0",
-      submissionRate: "0",
-      bounceRate: "0",
+      visits :0,
+      submissions:0,
+      submissionRate:0,
+      bounceRate:0,
     };
   }
 }
@@ -70,20 +70,7 @@ export async function CreateForm(values: formSchemaType) {
     } else {
       console.error("Error fetching form stats:", response.status);
       // Handle error cases as needed
-      return {
-        _id: "65f612b226215d4ffaa60ec0",
-        name: "test",
-        description: "",
-        userId: "adarsh",
-        content: "[]",
-        published: false,
-        visits: 0,
-        submissions: 0,
-        shareURL: "fa47f2e7-b4c2-4c63-911a-d9c3f6599d89",
-        createdAt: "2024-03-16T21:44:18.448Z",
-        updatedAt: "2024-03-16T21:44:18.448Z",
-        __v: 0,
-      };
+      return null;
     }
   } catch (error) {
     console.error("An error occurred:", error);
@@ -106,41 +93,11 @@ export async function GetForms() {
     } else {
       console.error("Error fetching form stats:", response.status);
       // Handle error cases as needed
-      return [
-        {
-          _id: "65f612b226215d4ffaa60ec0",
-          name: "test",
-          description: "",
-          userId: "adarsh",
-          content: "[]",
-          published: false,
-          visits: 0,
-          submissions: 0,
-          shareURL: "fa47f2e7-b4c2-4c63-911a-d9c3f6599d89",
-          createdAt: "2024-03-16T21:44:18.448Z",
-          updatedAt: "2024-03-16T21:44:18.448Z",
-          __v: 0,
-        },
-      ];
+      return  null;
     }
   } catch (error) {
     console.error("An error occurred:", error);
     // Handle exceptions (e.g., network errors) here
-    return [
-      {
-        _id: "65f612b226215d4ffaa60ec0",
-        name: "test",
-        description: "",
-        userId: "adarsh",
-        content: "[]",
-        published: false,
-        visits: 0,
-        submissions: 0,
-        shareURL: "fa47f2e7-b4c2-4c63-911a-d9c3f6599d89",
-        createdAt: "2024-03-16T21:44:18.448Z",
-        updatedAt: "2024-03-16T21:44:18.448Z",
-        __v: 0,
-      },
-    ];
+    return null;
   }
 }
