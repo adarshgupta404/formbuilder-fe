@@ -77,7 +77,11 @@ export async function CreateForm(values: formSchemaType) {
 }
 export async function GetForms() {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/formbuilder`);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/formbuilder`, {
+      next: {
+        revalidate: 3600,
+      },
+    });
 
     if (response.ok) {
       const data = await response.json();
@@ -97,10 +101,12 @@ export async function GetForms() {
 
 export async function GetFormById(id: string) {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/formbuilder/${id}`);
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_URL}/formbuilder/${id}`
+    );
     if (response.ok) {
       const data = await response.json();
-      console.log(data)
+      console.log(data);
       return data;
     } else {
       console.error("Error fetching form stats:", response.status);
