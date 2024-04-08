@@ -5,8 +5,7 @@ import { formSchemaType } from "@/types/form";
 export async function GetFormStats() {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_URL}/formbuilder/65f612b226215d4ffaa60ec0`,
-      { next: { revalidate: 60 } }
+      `${process.env.NEXT_PUBLIC_URL}/formbuilder/65f612b226215d4ffaa60ec0`
     );
 
     if (response.ok) {
@@ -78,9 +77,7 @@ export async function CreateForm(values: formSchemaType) {
 }
 export async function GetForms() {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/formbuilder`, {
-      next: { revalidate: 60 },
-    });
+    const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/formbuilder`);
 
     if (response.ok) {
       const data = await response.json();
@@ -100,9 +97,7 @@ export async function GetForms() {
 
 export async function GetFormById(id: string) {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/formbuilder/${id}`, {
-      next: { revalidate: 60 },
-    });
+    const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/formbuilder/${id}`);
     if (response.ok) {
       const data = await response.json();
       console.log(data)
