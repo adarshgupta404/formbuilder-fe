@@ -1,10 +1,14 @@
-"use client"
+import { GetFormById } from "@/actions/forms";
+import Formbuilder from "@/components/Formbuilder";
+import { FormBuilder } from "@/types/@types";
 
-export default function Page({ params }: { params: { formid: string } }) {
-    // throw new Error("error") 
+const Page = async ({ params }: { params: { formid: string } }) => {
+  const formid = params.formid;
+  const form : FormBuilder = await GetFormById(formid);
   return (
-    <div>
-      My Form: {params.formid}
+    <div className="w-full flex flex-grow">
+      <Formbuilder form={form}/>
     </div>
   );
-}
+};
+export default Page;

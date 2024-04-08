@@ -6,9 +6,7 @@ export async function GetFormStats() {
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_URL}/formbuilder/65f612b226215d4ffaa60ec0`,
-      {
-        method: "GET",
-      }
+      { next: { revalidate: 60 } }
     );
 
     if (response.ok) {
@@ -34,20 +32,20 @@ export async function GetFormStats() {
       console.error("Error fetching form stats:", response.status);
       // Handle error cases as needed
       return {
-        visits :0,
-        submissions:0,
-        submissionRate:0,
-        bounceRate:0,
+        visits: 0,
+        submissions: 0,
+        submissionRate: 0,
+        bounceRate: 0,
       };
     }
   } catch (error) {
     console.error("An error occurred:", error);
     // Handle exceptions (e.g., network errors) here
     return {
-      visits :0,
-      submissions:0,
-      submissionRate:0,
-      bounceRate:0,
+      visits: 0,
+      submissions: 0,
+      submissionRate: 0,
+      bounceRate: 0,
     };
   }
 }
@@ -81,23 +79,38 @@ export async function CreateForm(values: formSchemaType) {
 export async function GetForms() {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/formbuilder`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      next: { revalidate: 60 },
     });
 
     if (response.ok) {
       const data = await response.json();
+      // console.log(data)
       return data;
     } else {
       console.error("Error fetching form stats:", response.status);
       // Handle error cases as needed
-      return  null;
+      return null;
     }
   } catch (error) {
     console.error("An error occurred:", error);
     // Handle exceptions (e.g., network errors) here
     return null;
   }
+}
+
+export async function GetFormById(id: string) {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/formbuilder/${id}`, {
+      next: { revalidate: 60 },
+    });
+    if (response.ok) {
+      const data = await response.json();
+      console.log(data)
+      return data;
+    } else {
+      console.error("Error fetching form stats:", response.status);
+      // Handle error cases as needed
+      return null;
+    }
+  } catch (error) {}
 }
