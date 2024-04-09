@@ -1,12 +1,6 @@
 "use client";
 
-import { MdTextFields } from "react-icons/md";
-import {
-  ElementsType,
-  FormElement,
-  FormElementInstance,
-  SubmitFunction,
-} from "../FormElements";
+import { ElementsType, FormElement, FormElementInstance, SubmitFunction } from "../FormElements";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { z } from "zod";
@@ -15,26 +9,21 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import useDesigner from "../hooks/useDesigner";
 
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../ui/form";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Switch } from "../ui/switch";
 import { cn } from "@/lib/utils";
+import { BsTextareaResize } from "react-icons/bs";
+import { Textarea } from "../ui/textarea";
+import { Slider } from "../ui/slider";
 
-const type: ElementsType = "TextField";
+const type: ElementsType = "TextAreaField";
 
 const extraAttributes = {
-  label: "Text field",
+  label: "Text area",
   helperText: "Helper text",
   required: false,
   placeHolder: "Value here...",
-  className: "",
+  rows: 3,
 };
 
 const propertiesSchema = z.object({
@@ -42,10 +31,10 @@ const propertiesSchema = z.object({
   helperText: z.string().max(200),
   required: z.boolean().default(false),
   placeHolder: z.string().max(50),
-  className: z.string().max(50),
+  rows: z.number().min(1).max(10),
 });
 
-export const TextFieldFormElement: FormElement = {
+export const TextAreaFormElement: FormElement = {
   type,
   construct: (id: string) => ({
     id,
@@ -53,17 +42,14 @@ export const TextFieldFormElement: FormElement = {
     extraAttributes,
   }),
   designerBtnElement: {
-    icon: MdTextFields,
-    label: "Text Field",
+    icon: BsTextareaResize,
+    label: "TextArea Field",
   },
   designerComponent: DesignerComponent,
   formComponent: FormComponent,
   propertiesComponent: PropertiesComponent,
 
-  validate: (
-    formElement: FormElementInstance,
-    currentValue: string
-  ): boolean => {
+  validate: (formElement: FormElementInstance, currentValue: string): boolean => {
     const element = formElement as CustomInstance;
     if (element.extraAttributes.required) {
       return currentValue.length > 0;
@@ -77,24 +63,17 @@ type CustomInstance = FormElementInstance & {
   extraAttributes: typeof extraAttributes;
 };
 
-function DesignerComponent({
-  elementInstance,
-}: {
-  elementInstance: FormElementInstance;
-}) {
+function DesignerComponent({ elementInstance }: { elementInstance: FormElementInstance }) {
   const element = elementInstance as CustomInstance;
-  const { label, required, placeHolder, helperText, className } =
-    element.extraAttributes;
+  const { label, required, placeHolder, helperText, rows } = element.extraAttributes;
   return (
-    <div className={`${className} flex flex-col gap-2 w-full `}>
+    <div className="flex flex-col gap-2 w-full">
       <Label>
         {label}
-        {required && <span className="ml-1 text-red-600">*</span>}
+        {required && "*"}
       </Label>
-      <Input readOnly disabled placeholder={placeHolder} />
-      {helperText && (
-        <p className="text-muted-foreground text-[0.8rem]">{helperText}</p>
-      )}
+      <Textarea readOnly disabled placeholder={placeHolder} />
+      {helperText && <p className="text-muted-foreground text-[0.8rem]">{helperText}</p>}
     </div>
   );
 }
@@ -119,46 +98,35 @@ function FormComponent({
     setError(isInvalid === true);
   }, [isInvalid]);
 
-  const { label, required, placeHolder, helperText, className } = element.extraAttributes;
+  const { label, required, placeHolder, helperText, rows } = element.extraAttributes;
   return (
-    <div className={`${className} flex flex-col gap-2 w-full `}>
+    <div className="flex flex-col gap-2 w-full">
       <Label className={cn(error && "text-red-500")}>
         {label}
         {required && "*"}
       </Label>
-      <Input
+      <Textarea
         className={cn(error && "border-red-500")}
+        rows={rows}
         placeholder={placeHolder}
         onChange={(e) => setValue(e.target.value)}
         onBlur={(e) => {
           if (!submitValue) return;
-          const valid = TextFieldFormElement.validate(element, e.target.value);
+          const valid = TextAreaFormElement.validate(element, e.target.value);
           setError(!valid);
           if (!valid) return;
           submitValue(element.id, e.target.value);
         }}
         value={value}
       />
-      {helperText && (
-        <p
-          className={cn(
-            "text-muted-foreground text-[0.8rem]",
-            error && "text-red-500"
-          )}
-        >
-          {helperText}
-        </p>
-      )}
+      {helperText && <p className={cn("text-muted-foreground text-[0.8rem]", error && "text-red-500")}>{helperText}</p>}
     </div>
   );
 }
 
 type propertiesFormSchemaType = z.infer<typeof propertiesSchema>;
-function PropertiesComponent({
-  elementInstance,
-}: {
-  elementInstance: FormElementInstance;
-}) {
+
+function PropertiesComponent({ elementInstance }: { elementInstance: FormElementInstance }) {
   const element = elementInstance as CustomInstance;
   const { updateElement } = useDesigner();
   const form = useForm<propertiesFormSchemaType>({
@@ -169,7 +137,7 @@ function PropertiesComponent({
       helperText: element.extraAttributes.helperText,
       required: element.extraAttributes.required,
       placeHolder: element.extraAttributes.placeHolder,
-      className: element.extraAttributes.className,
+      rows: element.extraAttributes.rows,
     },
   });
 
@@ -178,7 +146,7 @@ function PropertiesComponent({
   }, [element, form]);
 
   function applyChanges(values: propertiesFormSchemaType) {
-    const { label, helperText, placeHolder, required, className } = values;
+    const { label, helperText, placeHolder, required, rows } = values;
     updateElement(element.id, {
       ...element,
       extraAttributes: {
@@ -186,7 +154,7 @@ function PropertiesComponent({
         helperText,
         placeHolder,
         required,
-        className
+        rows,
       },
     });
   }
@@ -215,8 +183,7 @@ function PropertiesComponent({
                 />
               </FormControl>
               <FormDescription>
-                The label of the field. <br /> It will be displayed above the
-                field
+                The label of the field. <br /> It will be displayed above the field
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -265,6 +232,27 @@ function PropertiesComponent({
         />
         <FormField
           control={form.control}
+          name="rows"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Rows {form.watch("rows")}</FormLabel>
+              <FormControl>
+                <Slider
+                  defaultValue={[field.value]}
+                  min={1}
+                  max={10}
+                  step={1}
+                  onValueChange={(value) => {
+                    field.onChange(value[0]);
+                  }}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
           name="required"
           render={({ field }) => (
             <FormItem className="flex items-center justify-between rounded-lg border p-3 shadow-sm">
@@ -276,32 +264,8 @@ function PropertiesComponent({
                 </FormDescription>
               </div>
               <FormControl>
-                <Switch
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                />
+                <Switch checked={field.value} onCheckedChange={field.onChange} />
               </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="className"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>ClassName</FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") e.currentTarget.blur();
-                  }}
-                />
-              </FormControl>
-              <FormDescription>
-                You can add tailwindcss classes here.
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}

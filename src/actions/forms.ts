@@ -1,6 +1,7 @@
 "use server";
 
 import { formSchemaType } from "@/types/form";
+import { toast } from "sonner";
 
 export async function GetFormStats() {
   try {
@@ -79,7 +80,7 @@ export async function GetForms() {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/formbuilder`, {
       next: {
-        revalidate: 3600,
+        revalidate: 0,
       },
     });
 
@@ -102,7 +103,12 @@ export async function GetForms() {
 export async function GetFormById(id: string) {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_URL}/formbuilder/${id}`
+      `${process.env.NEXT_PUBLIC_URL}/formbuilder/${id}`,
+      {
+        next: {
+          revalidate: 0,
+        },
+      }
     );
     if (response.ok) {
       const data = await response.json();
@@ -115,3 +121,33 @@ export async function GetFormById(id: string) {
     }
   } catch (error) {}
 }
+
+export async function UpdateFormContent(id: string, jsonContent: string) {
+  // const user =  await currentUser();
+  const user = "adarsh";
+  if (user) {
+    toast.error("user not found");
+  }
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_URL}/formbuilder/${id}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ jsoncontent: jsonContent }),
+      }
+    );
+    if (response.ok) {
+      const data = await response.json();
+      console.log(data);
+      return data;
+    } else {
+      console.error("Error fetching form stats:", response.status);
+      // Handle error cases as needed
+      return null;
+    }
+  } catch (error) {}
+}
+
