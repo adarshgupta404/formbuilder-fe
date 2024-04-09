@@ -1,7 +1,6 @@
 "use server";
 
 import { formSchemaType } from "@/types/form";
-import { toast } from "sonner";
 
 export async function GetFormStats() {
   try {
@@ -63,7 +62,6 @@ export async function CreateForm(values: formSchemaType) {
 
     if (response.ok) {
       const data = await response.json();
-      console.log("Form stats:", object);
       return data;
     } else {
       console.error("Error fetching form stats:", response.status);
@@ -87,7 +85,7 @@ export async function GetForms() {
     if (response.ok) {
       const data = await response.json();
       // console.log(data)
-      return data;
+      return data.reverse();
     } else {
       console.error("Error fetching form stats:", response.status);
       // Handle error cases as needed
@@ -112,7 +110,6 @@ export async function GetFormById(id: string) {
     );
     if (response.ok) {
       const data = await response.json();
-      console.log(data);
       return data;
     } else {
       console.error("Error fetching form stats:", response.status);
@@ -126,7 +123,7 @@ export async function UpdateFormContent(id: string, jsonContent: string) {
   // const user =  await currentUser();
   const user = "adarsh";
   if (user) {
-    toast.error("user not found");
+    console.log("user not found");
   }
   try {
     const response = await fetch(

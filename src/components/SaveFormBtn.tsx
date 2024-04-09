@@ -5,6 +5,8 @@ import { HiSaveAs } from "react-icons/hi";
 import useDesigner from "./hooks/useDesigner";
 import { UpdateFormContent } from "@/actions/forms";
 import { FaSpinner } from "react-icons/fa";
+import { toast } from "@/components/ui/use-toast";
+
 
 const SaveFormBtn = ({ id }: { id: string }) => {
   const { elements } = useDesigner();
@@ -25,11 +27,17 @@ const SaveFormBtn = ({ id }: { id: string }) => {
       );
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
+        toast({
+          title: "Success",
+          description: "Form created successfully",
+        });
         return data;
       } else {
-        console.error("Error fetching form stats:", response.status);
-        // Handle error cases as needed
+        toast({
+          title: "Error",
+          description: "Error in saving form!",
+          variant: "destructive",
+        });
         return null;
       }
     } catch (error) {}
@@ -41,8 +49,8 @@ const SaveFormBtn = ({ id }: { id: string }) => {
       disabled={loading}
       onClick={() => startTransition(updateFormContent)}
     >
-      <HiSaveAs className="h-6 w-6" />
-      Save {loading && <FaSpinner />}
+      <HiSaveAs className="h-6 w-6 " />
+      Save {loading && <FaSpinner className=" animate-spin h-6 w-6"/>}
     </Button>
   );
 };
