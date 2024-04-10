@@ -5,7 +5,8 @@ import { formSchemaType } from "@/types/form";
 export async function GetFormStats() {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_URL}/formbuilder/65f612b226215d4ffaa60ec0`
+      `${process.env.NEXT_PUBLIC_URL}/formbuilder/65f612b226215d4ffaa60ec0`,
+      { next: { revalidate: 0 } }
     );
 
     if (response.ok) {
@@ -66,12 +67,12 @@ export async function CreateForm(values: formSchemaType) {
     } else {
       console.error("Error fetching form stats:", response.status);
       // Handle error cases as needed
-      return null;
+      return [];
     }
   } catch (error) {
     console.error("An error occurred:", error);
     // Handle exceptions (e.g., network errors) here
-    return null;
+    return [];
   }
 }
 export async function GetForms() {
@@ -89,12 +90,12 @@ export async function GetForms() {
     } else {
       console.error("Error fetching form stats:", response.status);
       // Handle error cases as needed
-      return null;
+      return [];
     }
   } catch (error) {
     console.error("An error occurred:", error);
     // Handle exceptions (e.g., network errors) here
-    return null;
+    return [];
   }
 }
 
@@ -102,11 +103,7 @@ export async function GetFormById(id: string) {
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_URL}/formbuilder/${id}`,
-      {
-        next: {
-          revalidate: 0,
-        },
-      }
+      { next: { revalidate: 0 } }
     );
     if (response.ok) {
       const data = await response.json();
@@ -138,7 +135,38 @@ export async function UpdateFormContent(id: string, jsonContent: string) {
     );
     if (response.ok) {
       const data = await response.json();
-      console.log(data);
+      return data;
+    } else {
+      console.error("Error fetching form stats:", response.status);
+      // Handle error cases as needed
+      return [];
+    }
+  } catch (error) {}
+}
+export async function GetFormContentByUrl(id: string) {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_URL}/formbuilder/getformcontentbyurl/${id}`,
+      { next: { revalidate: 0 } }
+    );
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      console.error("Error fetching form stats:", response.status);
+      // Handle error cases as needed
+      return null;
+    }
+  } catch (error) {}
+}
+export async function GetFormWithSubmissions(id: string) {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_URL}/formbuilder/getformwithsub/${id}`,
+      { next: { revalidate: 0 } }
+    );
+    if (response.ok) {
+      const data = await response.json();
       return data;
     } else {
       console.error("Error fetching form stats:", response.status);
@@ -148,3 +176,25 @@ export async function UpdateFormContent(id: string, jsonContent: string) {
   } catch (error) {}
 }
 
+export async function SubmitForm(formUrl: string, content: string) {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_URL}/formbuilder/submit/${formUrl}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ jsoncontent: content }),
+      }
+    );
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      console.error("Error fetching form stats:", response.status);
+      // Handle error cases as needed
+      return null;
+    }
+  } catch (error) {}
+}

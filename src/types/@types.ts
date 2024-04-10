@@ -11,6 +11,7 @@ export interface FormBuilder {
     shareURL: string;
     createdAt: string;
     updatedAt: string;
+    formSubmssions: string[];
     __v: number;
   }
 

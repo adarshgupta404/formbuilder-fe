@@ -94,7 +94,7 @@ function StatsCards(props: StatsCardProps) {
     </div>
   );
 }
-function StatsCard({
+export function StatsCard({
   title,
   icon,
   helperText,
