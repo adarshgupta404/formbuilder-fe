@@ -5,7 +5,7 @@ import { formSchemaType } from "@/types/form";
 export async function GetFormStats() {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_URL}/formbuilder/65f612b226215d4ffaa60ec0`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/formbuilder/65f612b226215d4ffaa60ec0`,
       { next: { revalidate: 0 } }
     );
 
@@ -53,7 +53,7 @@ export async function GetFormStats() {
 export async function CreateForm(values: formSchemaType) {
   const object = { userId: "adarsh", ...values };
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/formbuilder`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/formbuilder`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -77,7 +77,7 @@ export async function CreateForm(values: formSchemaType) {
 }
 export async function GetForms() {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/formbuilder`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/formbuilder`, {
       next: {
         revalidate: 0,
       },
@@ -102,7 +102,7 @@ export async function GetForms() {
 export async function GetFormById(id: string) {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_URL}/formbuilder/${id}`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/formbuilder/${id}`,
       { next: { revalidate: 0 } }
     );
     if (response.ok) {
@@ -124,7 +124,7 @@ export async function UpdateFormContent(id: string, jsonContent: string) {
   }
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_URL}/formbuilder/${id}`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/formbuilder/${id}`,
       {
         method: "PATCH",
         headers: {
@@ -146,7 +146,7 @@ export async function UpdateFormContent(id: string, jsonContent: string) {
 export async function GetFormContentByUrl(id: string) {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_URL}/formbuilder/getformcontentbyurl/${id}`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/formbuilder/getformcontentbyurl/${id}`,
       { next: { revalidate: 0 } }
     );
     if (response.ok) {
@@ -162,7 +162,7 @@ export async function GetFormContentByUrl(id: string) {
 export async function GetFormWithSubmissions(id: string) {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_URL}/formbuilder/getformwithsub/${id}`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/formbuilder/getformwithsub/${id}`,
       { next: { revalidate: 0 } }
     );
     if (response.ok) {
@@ -179,7 +179,7 @@ export async function GetFormWithSubmissions(id: string) {
 export async function SubmitForm(formUrl: string, content: string) {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_URL}/formbuilder/submit/${formUrl}`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/formbuilder/submit/${formUrl}`,
       {
         method: "PATCH",
         headers: {

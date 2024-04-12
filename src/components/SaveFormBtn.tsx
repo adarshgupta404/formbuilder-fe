@@ -16,7 +16,7 @@ const SaveFormBtn = ({ id }: { id: string }) => {
     try {
       const JsonElements = JSON.stringify(elements);
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_URL}/formbuilder/${id}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/formbuilder/${id}`,
         {
           method: "PATCH",
           headers: {
